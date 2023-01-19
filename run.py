@@ -58,7 +58,7 @@ def validate_data(values):
 
 def update_worksheet(data, worksheet):
     """
-    Recieves a list of intigers to be inserted into a worksheet
+    Receives a list of integers to be inserted into a worksheet
     Update the relevant worksheet with the data provided
     """
     print(f"Updating {worksheet} worksheet...\n")
@@ -67,7 +67,6 @@ def update_worksheet(data, worksheet):
     print(f"{worksheet} worksheet updated successfully\n")
 
     
-
 def calculate_surplus_data(sales_row):
     """
     Compare sales with stock and calculate the surplus for each item type.
@@ -87,10 +86,11 @@ def calculate_surplus_data(sales_row):
 
     return surplus_data   
 
+
 def get_last_5_entries_sales():
     """
-    Collects collumns of data from sales worksheet, collecting
-    the last 5 entries. for each sandwich and returns the data
+    Collects columns of data from sales worksheet, collecting
+    the last 5 entries for each sandwich and returns the data
     as a list of lists.
     """
     sales = SHEET.worksheet("sales")
@@ -100,7 +100,24 @@ def get_last_5_entries_sales():
         column = sales.col_values(ind)
         columns.append(column[-5:])
     
-    return columns    
+    return columns
+
+
+def calculate_stock_data(data):
+    """
+    Calculate the average stock for each item type, adding 10%
+    """
+    print("Calculating stock data...\n")
+    new_stock_data = []
+
+    for column in data:
+        int_column = [int(num) for num in column]
+        average = sum(int_column) / len(int_column)
+        stock_num = average * 1.1
+        new_stock_data.append(round(stock_num))
+        
+    return new_stock_data
+
 
 def main():
     """
@@ -111,9 +128,10 @@ def main():
     update_worksheet(sales_data, "sales")
     new_surplus_data = calculate_surplus_data(sales_data)
     update_worksheet(new_surplus_data, "surplus")
+    sales_columns = get_last_5_entries_sales()
+    stock_data = calculate_stock_data(sales_columns)
+    update_worksheet(stock_data, "stock")
+
 
 print("Welcome to Love Sandwiches Data Automation")
-"""
 main()
-"""
-sales_columns = get_last_5_entries_sales()
